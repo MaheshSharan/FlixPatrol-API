@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: flixpatrol-api
+    env: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    envVars:
+      - key: APP_NAME
+        value: FlixPatrol India Scraper API
+      - key: CONTACT_EMAIL
+        value: maheshsharan28@gmail.com
+      - key: REDIS_HOST
+        fromService:
+          type: redis
+          name: flixpatrol-redis
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          type: redis
+          name: flixpatrol-redis
+          property: port
+      - key: CACHE_EXPIRATION_SECONDS
+        value: 14400
+
+  - type: redis
+    name: flixpatrol-redis
+    ipAllowList: []
