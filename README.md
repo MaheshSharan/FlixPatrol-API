@@ -2,7 +2,7 @@
 
 A production-ready FastAPI service that scrapes Top 10 streaming data from FlixPatrol (INDIA). The service uses Redis caching for performance optimization and is containerized for easy deployment.
 
-> **Note:** This is an experimental, proof-of-concept API. It worked when originally developed but is no longer actively maintained, so it may not function reliably today. The project demonstrates the FlixPatrol scraping approach (currently configured for India) and can be adapted to other regions with modest code changes — however, scrapers are brittle and may require updates if the source site changes.my dump api **
+> **Note:** This is an experimental, proof-of-concept API. It worked when originally developed but is no longer actively maintained, so it may not function reliably today. The project demonstrates the FlixPatrol scraping approach (currently configured for India) and can be adapted to other regions with modest code changes — however, scrapers are brittle and may require updates if the source site changes.(I'm posting this proj. now but it's around 2-3 years old)
 
 ## Features
 
