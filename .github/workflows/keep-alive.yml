@@ -1,0 +1,28 @@
+name: Keep Render Service Alive
+
+on:
+  schedule:
+    # Run every 10 minutes to prevent Render free tier from sleeping (sleeps after 15 minutes)
+    - cron: '*/10 * * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Health Endpoint
+        run: |
+          echo "Pinging FlixPatrol API health endpoint..."
+          response=$(curl -s -o /dev/null -w "%{http_code}" https://flixpatrol-api.onrender.com/health)
+          if [ $response -eq 200 ]; then
+            echo "✅ Health check successful (HTTP $response)"
+          else
+            echo "❌ Health check failed (HTTP $response)"
+            exit 1
+          fi
+      
+      - name: Optional - Ping Main API
+        run: |
+          echo "Testing main API endpoint..."
+          curl -s https://flixpatrol-api.onrender.com/api/v1/india/netflix/movies | head -c 100
+          echo "...API response received"

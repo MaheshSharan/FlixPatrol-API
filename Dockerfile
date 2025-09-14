@@ -24,6 +24,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY ./app /app/app
 COPY .env /app/.env
 
+
 # Command to run the application
 # Use 0.0.0.0 to expose the port to the host machine
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

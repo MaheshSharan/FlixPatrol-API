@@ -1,6 +1,8 @@
-# FlixPatrol India Scraper API
+# FlixPatrol  Scraper API
 
-A production-ready FastAPI service that scrapes Top 10 streaming data from FlixPatrol for India. The service uses Redis caching for performance optimization and is containerized for easy deployment.
+A production-ready FastAPI service that scrapes Top 10 streaming data from FlixPatrol (INDIA). The service uses Redis caching for performance optimization and is containerized for easy deployment.
+
+> **Note:** This is an experimental, proof-of-concept API. It worked when originally developed but is no longer actively maintained, so it may not function reliably today. The project demonstrates the FlixPatrol scraping approach (currently configured for India) and can be adapted to other regions with modest code changes — however, scrapers are brittle and may require updates if the source site changes.my dump api **
 
 ## Features
 
@@ -33,7 +35,7 @@ The scraper identifies itself with User-Agent: `FlixPatrol India Scraper API/1.0
 
 ### Running the Service
 
-1. Clone the repository
+1. Clone the repository and update env file using example.env
 2. Build and start the services:
    ```bash
    docker-compose up --build
