@@ -276,6 +276,17 @@ async def redis_health(redis_client = Depends(get_redis_client)):
     """Check Redis connection status."""
     try:
         await redis_client.ping()
-        return {"redis": "connected", "status": "healthy"}
+        return {
+            "redis": "connected", 
+            "status": "healthy",
+            "type": settings.REDIS_TYPE,
+            "host": settings.UPSTASH_REDIS_REST_URL if settings.is_upstash_redis else f"{settings.REDIS_HOST}:{settings.REDIS_PORT}"
+        }
     except Exception as e:
-        return {"redis": "failed", "error": str(e), "status": "unhealthy"}
+        return {
+            "redis": "failed", 
+            "error": str(e), 
+            "status": "unhealthy",
+            "type": settings.REDIS_TYPE,
+            "host": settings.UPSTASH_REDIS_REST_URL if settings.is_upstash_redis else f"{settings.REDIS_HOST}:{settings.REDIS_PORT}"
+        }
