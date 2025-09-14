@@ -269,3 +269,13 @@ async def fetch_all(
     
     logger.info(f"Fetchall completed: {successful_requests}/{total_requests} successful requests")
     return final_response
+
+
+@router.get("/redis-health")
+async def redis_health(redis_client = Depends(get_redis_client)):
+    """Check Redis connection status."""
+    try:
+        await redis_client.ping()
+        return {"redis": "connected", "status": "healthy"}
+    except Exception as e:
+        return {"redis": "failed", "error": str(e), "status": "unhealthy"}
