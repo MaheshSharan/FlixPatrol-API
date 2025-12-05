@@ -5,17 +5,16 @@ version: '3.8'
 services:
   api:
     build: .
+    container_name: flixpatrol-api
     ports:
-      - "8000:8000"
-    volumes:
-      - ./app:/app/app
+      - "127.0.0.1:8001:8000"
     env_file:
       - .env
-    depends_on:
-      - redis
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
+    environment:
+      - REDIS_TYPE=local
+      - REDIS_HOST=host.docker.internal
+      - REDIS_PORT=6380
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
