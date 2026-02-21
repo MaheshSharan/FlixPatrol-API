@@ -4,6 +4,10 @@ class Settings(BaseSettings):
     APP_NAME: str = "FlixPatrol India Scraper API"
     CONTACT_EMAIL: str
     
+    # TMDB API configuration
+    TMDB_API_KEY: str = ""
+    TMDB_BASE_URL: str = "https://api.themoviedb.org/3"
+    
     # Redis configuration - flexible for different deployment types
     REDIS_TYPE: str = "local"  # "local" for Docker Redis, "upstash" for Upstash Redis
     

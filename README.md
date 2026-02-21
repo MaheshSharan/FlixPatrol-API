@@ -6,6 +6,12 @@ A production-ready FastAPI service that scrapes Top 10 streaming data from FlixP
 
 ## Features
 
+- **Smart TMDB Matching**: Automatic fuzzy matching with TMDB database
+  - Intelligent title normalization and cleaning
+  - Year-based relevance scoring (prioritizes recent releases)
+  - Multi-factor confidence scoring (title similarity + year + popularity)
+  - Handles title variations and international names
+  - Returns TMDB ID, media type, year, poster path, and confidence score
 - High-performance Redis caching with 4-hour expiration
 - Concurrent async processing for optimal response times  
 - Production-ready Docker containerization
@@ -32,10 +38,15 @@ The scraper identifies itself with User-Agent: `FlixPatrol India Scraper API/1.0
 ### Prerequisites
 - Docker
 - Docker Compose
+- TMDB API Key (get from https://www.themoviedb.org/settings/api)
 
 ### Running the Service
 
-1. Clone the repository and update env file using example.env
+1. Clone the repository and configure environment:
+   ```bash
+   cp example.env .env
+   # Edit .env and add your TMDB_API_KEY
+   ```
 2. Build and start the services:
    ```bash
    docker-compose up --build
@@ -93,15 +104,40 @@ curl http://localhost:8000/health
   {
     "rank": 1,
     "title": "Jawan",
-    "days_in_top_10": "7 days"
+    "days_in_top_10": "7 days",
+    "tmdb_id": 945729,
+    "media_type": "movie",
+    "year": 2023,
+    "match_confidence": 0.95,
+    "poster_path": "/xvk8qWkLLQKH6vimRYWgbVnYYaR.jpg"
   },
   {
     "rank": 2,
     "title": "Pathaan", 
-    "days_in_top_10": "14 days"
+    "days_in_top_10": "14 days",
+    "tmdb_id": 840326,
+    "media_type": "movie",
+    "year": 2023,
+    "match_confidence": 0.92,
+    "poster_path": "/kYgQzzjNis5jJalYtIHgrom0gOx.jpg"
   }
 ]
 ```
+
+**TMDB Matching Details:**
+- `tmdb_id`: TMDB database ID (null if no match found)
+- `media_type`: "movie" or "tv" (null if no match)
+- `year`: Release/first air year (null if no match)
+- `match_confidence`: Confidence score 0-1 (null if no match, only returns matches ≥ 0.6)
+- `poster_path`: TMDB poster path (null if no match)
+
+**Matching Algorithm:**
+1. Title normalization (removes special chars, years, common suffixes)
+2. Fuzzy string matching using SequenceMatcher
+3. Year-based relevance scoring (prioritizes recent releases)
+4. Weighted scoring: 70% title similarity + 30% year relevance
+5. Popularity boost for high vote count content
+6. Only returns matches with confidence ≥ 0.6
 
 ### Fetch All Response
 The `/fetchall` endpoint returns aggregated data from all platforms with a summary section:
@@ -145,6 +181,8 @@ The `/fetchall` endpoint returns aggregated data from all platforms with a summa
 |----------|---------|-------------|
 | `APP_NAME` | `"FlixPatrol India Scraper API"` | Application name |
 | `CONTACT_EMAIL` | `"maheshsharan28@gmail.com"` | Contact email for User-Agent |
+| `TMDB_API_KEY` | `""` | TMDB API key for smart matching |
+| `TMDB_BASE_URL` | `"https://api.themoviedb.org/3"` | TMDB API base URL |
 | `REDIS_HOST` | `redis` | Redis server hostname |
 | `REDIS_PORT` | `6379` | Redis server port |
 | `CACHE_EXPIRATION_SECONDS` | `14400` | Cache TTL (4 hours) |

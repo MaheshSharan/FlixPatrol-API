@@ -69,7 +69,7 @@ async def get_cached_or_scrape(
         return None
 
     # Scrape the data
-    data = await scraper.get_top_10_for_category(platform_slug, section_title)
+    data = await scraper.get_top_10_for_category(platform_slug, section_title, category_key)
     
     # Cache the results if successful
     if data:

@@ -6,6 +6,11 @@ class TopTenItem(BaseModel):
     rank: int = Field(..., description="Ranking position (1-10)")
     title: str = Field(..., description="Title of the movie/show") 
     days_in_top_10: str = Field(..., description="Number of days in top 10")
+    tmdb_id: Optional[int] = Field(None, description="TMDB ID if matched")
+    media_type: Optional[str] = Field(None, description="movie or tv")
+    year: Optional[int] = Field(None, description="Release/first air year")
+    match_confidence: Optional[float] = Field(None, description="Match confidence score (0-1)")
+    poster_path: Optional[str] = Field(None, description="TMDB poster path")
 
 class PlatformStatus(BaseModel):
     """Status information for a platform category"""
